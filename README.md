@@ -15,6 +15,9 @@ Cuando usas el método then():
 El método then() se utiliza para encadenar el manejo de promesas y permite especificar funciones de devolución de llamada separadas para el caso de éxito (then()) y el caso de error (catch()). Esto puede resultar en un código más detallado pero complicado cuando se tienen múltiples operaciones asíncronas encadenadas.
 
 Al utilizar el método then(), el flujo del código no se ve tan secuencial y síncrono como con async y await. Es necesario anidar las llamadas then() para manejar múltiples operaciones asíncronas consecutivas, lo que puede dificultar la lectura y el mantenimiento del código.
+
+"Cuando una función utiliza promesas y then() para manejar la asincronía, no es necesario convertirla a una función asíncrona. Las promesas ya brindan un mecanismo efectivo para manejar el flujo asíncrono y capturar errores."
+
 # ¿Qué diferencias encontraste entre async, await y el método then()?
 
 En general, async y await se tiene mejor legibilidad y capacidad para manejar errores con bloques try-catch. Sin embargo, el método then() es útil cuando trabajas con herramientas que utilizan promesas .

@@ -22,7 +22,7 @@ function mostrarMenu() {
 function pregunta(preguntaText) {
   return new Promise((resolve) => {
     rl.question(preguntaText, (respuesta) => {
-        resolve(respuesta);
+      resolve(respuesta);
     });
   });
 }
@@ -32,43 +32,48 @@ function agregarTarea() {
     .then((descripcion) => {
       const tarea = {
         id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
-            descripcion: descripcion,
+        descripcion: descripcion,
         completada: false
       };
       tasks.push(tarea);
       console.log('Tarea agregada:', tarea);
+    })
+    .catch((error) => {
+      console.error('Error al agregar la tarea:', error);
     });
 }
-
-function modificarTarea() {
-  return pregunta('Ingrese el ID de la tarea a modificar: ')
-    .then((id) => {
-      const tarea = tasks.find(t => t.id === parseInt(id));
-      if (tarea) {
-        return pregunta('Ingrese la nueva descripción de la tarea: ')
-          .then((nuevaDescripcion) => {
-            tarea.descripcion = nuevaDescripcion;
-            console.log('Tarea modificada:', tarea);
-          });
-              } else {
-        console.log('No se encontró la tarea con el ID especificado.');
-      }
-    });
+//Esta funcion la deje de la manera (async y await) con el fin de que se note la diferencia en el codigo
+async function modificarTarea() {
+  try {
+    const id = await pregunta('Ingrese el ID de la tarea a modificar:');
+    const tarea = tasks.find(t => t.id === parseInt(id));
+    if (!tarea) {
+      throw new Error('No se encontró la tarea con el ID especificado.');
+    }
+    const nuevaDescripcion = await pregunta('Ingrese la nueva descripción de la tarea:');
+    tarea.descripcion = nuevaDescripcion;
+    console.log('Tarea modificada:', tarea);
+  } catch (error) {
+    console.error('Error al modificar la tarea:', error);
+  }
 }
 
+//Funcion usando el metodo Then
 function completarTarea() {
   return pregunta('Ingrese el ID de la tarea a completar: ')
     .then((id) => {
       const tarea = tasks.find(t => t.id === parseInt(id));
-         if (tarea) {
+      if (tarea) {
         tarea.completada = true;
         console.log('Tarea completada:', tarea);
       } else {
         console.log('No se encontró la tarea con el ID especificado.');
       }
+    }).catch((error) => {
+      console.error('Error al agregar la tarea:', error);
     });
 }
-
+//Funcion usando el metodo Then
 function eliminarTarea() {
   return pregunta('Ingrese el ID de la tarea a eliminar: ')
     .then((id) => {
@@ -82,26 +87,27 @@ function eliminarTarea() {
         } else {
           console.log('La tarea no se puede eliminar, aún no se ha completado');
         }
-      }     else {
-             console.log('No se encontró la tarea con el ID especificado.');
+      } else {
+        console.log('No se encontró la tarea con el ID especificado.');
       }
+    }).catch((error) => {
+      console.error('Error al agregar la tarea:', error);
     });
 }
 
 function displayTasks() {
-    console.log('Mostrando Tareas');
+  console.log('Mostrando Tareas');
   console.log(tasks);
-  return Promise.resolve();
+  return Promise.resolve();  // ESTA linea puede sobrar
 }
 
 function salir() {
-    console.log('Saliendo del programa...');
-    rl.close();
+  console.log('Saliendo del programa');
+  rl.close();
 }
 
 async function run() {
-    mostrarMenu();
-
+  mostrarMenu();
 
   rl.on('line', async (input) => {
     const opcion = parseInt(input);
@@ -125,14 +131,21 @@ async function run() {
         salir();
         break;
       default:
-        console.log('Opción no válida. Por favor, ingrese un número del 1 al 5.');
+        console.log('Opción no válida. Por favor, ingrese un número del 1 al 6.');
         mostrarMenu();
         break;
     }
   });
 
-   rl.on('close', () => {
+/*
+  En resumen, aunque es poco probable que se produzca un error en el evento
+  'close', es posible que se produzca un error en el evento 'error' si hay 
+   algún problema con la entrada o salida estándar.
+*/
+  rl.on('close', () => {
     console.log('Programa finalizado.');
+  }).on('error', (error) => {
+    console.error('Error en la entrada:', error);
   });
 }
 run();
