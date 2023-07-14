@@ -1,4 +1,3 @@
-//PROMESAS Y METODO .then
 const readline = require('readline');
 
 const rl = readline.createInterface({
@@ -22,7 +21,7 @@ function mostrarMenu() {
 function pregunta(preguntaText) {
   return new Promise((resolve) => {
     rl.question(preguntaText, (respuesta) => {
-        resolve(respuesta);
+      resolve(respuesta);
     });
   });
 }
@@ -32,7 +31,7 @@ function agregarTarea() {
     .then((descripcion) => {
       const tarea = {
         id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
-            descripcion: descripcion,
+        descripcion: descripcion,
         completada: false
       };
       tasks.push(tarea);
@@ -50,7 +49,7 @@ function modificarTarea() {
             tarea.descripcion = nuevaDescripcion;
             console.log('Tarea modificada:', tarea);
           });
-              } else {
+      } else {
         console.log('No se encontró la tarea con el ID especificado.');
       }
     });
@@ -60,7 +59,7 @@ function completarTarea() {
   return pregunta('Ingrese el ID de la tarea a completar: ')
     .then((id) => {
       const tarea = tasks.find(t => t.id === parseInt(id));
-         if (tarea) {
+      if (tarea) {
         tarea.completada = true;
         console.log('Tarea completada:', tarea);
       } else {
@@ -82,26 +81,25 @@ function eliminarTarea() {
         } else {
           console.log('La tarea no se puede eliminar, aún no se ha completado');
         }
-      }     else {
-             console.log('No se encontró la tarea con el ID especificado.');
+      } else {
+        console.log('No se encontró la tarea con el ID especificado.');
       }
     });
 }
 
 function displayTasks() {
-    console.log('Mostrando Tareas');
+  console.log('Mostrando Tareas');
   console.log(tasks);
   return Promise.resolve();
 }
 
 function salir() {
-    console.log('Saliendo del programa...');
-    rl.close();
+  console.log('Saliendo del programa...');
+  rl.close();
 }
 
 async function run() {
-    mostrarMenu();
-
+  mostrarMenu();
 
   rl.on('line', async (input) => {
     const opcion = parseInt(input);
@@ -131,8 +129,9 @@ async function run() {
     }
   });
 
-   rl.on('close', () => {
+  rl.on('close', () => {
     console.log('Programa finalizado.');
   });
 }
+
 run();
