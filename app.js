@@ -23,16 +23,14 @@ function mostrarMenu() {
 function agregarTarea() {
   rl.question('Ingrese la descripción de la tarea: ', (descripcion) => {
     const tarea = {
-      id: tasks.length + 1,
+      id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
       descripcion: descripcion,
       completada: false
     };
     tasks.push(tarea);
     console.log('Tarea agregada:', tarea);
     mostrarMenu();
-
   });
-
 }
 
 function modificarTarea() {
@@ -57,6 +55,7 @@ function completarTarea() {
     if (tarea) {
       tarea.completada = true;
       console.log('Tarea completada:', tarea);
+      
       mostrarMenu();
     } else {
       console.log('No se encontró la tarea con el ID especificado.');
@@ -68,9 +67,18 @@ function completarTarea() {
 function eliminarTarea() {
   rl.question('Ingrese el ID de la tarea a eliminar: ', (id) => {
     const index = tasks.findIndex(t => t.id === parseInt(id));
+
     if (index !== -1) {
-      const tareaEliminada = tasks.splice(index, 1);
-      console.log('Tarea eliminada:', tareaEliminada[0]);
+      const tarea = tasks[index];
+5
+
+      if (tarea.completada === true) {
+        const tareaEliminada = tasks.splice(index, 1);
+        console.log('Tarea eliminada:', tareaEliminada[0]);
+      } else {
+        console.log('La tarea no se puede eliminar, aún no se ha completado');
+      }
+      
       mostrarMenu();
     } else {
       console.log('No se encontró la tarea con el ID especificado.');
