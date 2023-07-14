@@ -1,4 +1,3 @@
-//app.jsx  -- lista de tareas
 const readline = require('readline');
 
 const rl = readline.createInterface({
@@ -6,117 +5,127 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-let tasks = [];
+const tasks = []; // Array para almacenar las tareas
 
-function addTask(indicator, description) {
-  const task = { indicator, description, completed: false };
-  tasks.push(task);
-  console.log('Tarea añadida correctamente.');
+function mostrarMenu() {
+  console.log('----- Menú -----');
+  console.log('1. Agregar tarea');
+  console.log('2. Modificar tarea');
+  console.log('3. Completar tarea');
+  console.log('4. Eliminar tarea');
+  console.log('5. Mostrar Tareas');
+  console.log('6. Salir');
+  console.log('-----------------');
+//console.log(tasks);  
 }
 
-function removeTask(indicator) {
-  tasks = tasks.filter((task) => task.indicator !== indicator);
-  console.log('Tarea eliminada correctamente.');
-}
 
-function completeTask(indicator) {
-  const task = tasks.find((task) => task.indicator === indicator);
-  if (task) {
-    task.completed = true;
-    console.log('Tarea marcada como completada.');
-  } else {
-    console.log('No se encontró la tarea.');
-  }
-}
-
-function displayTasks() {
-  console.log('Lista de tareas:');
-  tasks.forEach((task) => {
-    const status = task.completed ? '[X]' : '[ ]';
-    console.log(`${status} ${task.indicator} - ${task.description}`);
+function agregarTarea() {
+  rl.question('Ingrese la descripción de la tarea: ', (descripcion) => {
+    const tarea = {
+      id: tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1,
+      descripcion: descripcion,
+      completada: false
+    };
+    tasks.push(tarea);
+    console.log('Tarea agregada:', tarea);
+    mostrarMenu();
   });
 }
 
-function processCommand(command) {
-  const parts = command.split('');
-  const action = parts[0];
-  const args = parts.slice(1);
-
-  const [indicator, description] = args;
-
-  console.log(indicator);
-  console.log(description);
-
-  switch (action) {
-    case 'add':
-      addTask(indicator, description);
-      break;
-    case 'remove':
-      const [removeIndicator] = args;
-      removeTask(removeIndicator);
-      break;
-    case 'complete':
-      const [completeIndicator] = args;
-      completeTask(completeIndicator);
-      break;
-    case 'list':
-      displayTasks();
-      break;
-    case 'exit':
-      rl.close();
-      break;
-    default:
-      console.log('Comando inválido.');
-  }
-}
-
-function question() {
-      
-  
-  rl.question('Ingrese un comando (add/remove/complete/list/exit):', (command) => {
-   
-    
-    processCommand(command);
-    if (command !== 'exit') {
-      question(); // Vuelve a llamar a la función para continuar preguntando
+function modificarTarea() {
+  rl.question('Ingrese el ID de la tarea a modificar: ', (id) => {
+    const tarea = tasks.find(t => t.id === parseInt(id));
+    if (tarea) {
+      rl.question('Ingrese la nueva descripción de la tarea: ', (nuevaDescripcion) => {
+        tarea.descripcion = nuevaDescripcion;
+        console.log('Tarea modificada:', tarea);
+        mostrarMenu();
+      });
+    } else {
+      console.log('No se encontró la tarea con el ID especificado.');
+      mostrarMenu();
     }
   });
 }
-question();
 
-
-
-//////////////////////////////////////////////////////////////////
-function mostrarMenu() {
-  console.log('=== Menú ===');
-  console.log('1. Agregar tarea');
-  console.log('2. Salir');
-  
-  const opcion = readline.question('Ingrese su opción: ');
-
-  switch (opcion) {
-    case '1':
-      agregarTarea();
-      break;
-    case '2':
-      console.log('¡Hasta luego!');
-      process.exit(0); // Terminar la ejecución del programa
-    default:
-      console.log('Opción inválida.');
+function completarTarea() {
+  rl.question('Ingrese el ID de la tarea a completar: ', (id) => {
+    const tarea = tasks.find(t => t.id === parseInt(id));
+    if (tarea) {
+      tarea.completada = true;
+      console.log('Tarea completada:', tarea);
+      
       mostrarMenu();
-  }
+    } else {
+      console.log('No se encontró la tarea con el ID especificado.');
+      mostrarMenu();
+    }
+  });
 }
 
-function agregarTarea() {
-  const tarea = readline.question('Ingrese la tarea: ');
-  const descripcion = readline.question('Ingrese la descripción: ');
+function eliminarTarea() {
+  rl.question('Ingrese el ID de la tarea a eliminar: ', (id) => {
+    const index = tasks.findIndex(t => t.id === parseInt(id));
 
-  // Aquí puedes hacer lo que necesites con la tarea y la descripción ingresadas,
-  // como almacenarlas en un arreglo o enviarlas a una API, por ejemplo.
-  
-  console.log('Tarea agregada exitosamente.');
+    if (index !== -1) {
+      const tarea = tasks[index];
+      if (tarea.completada === true) {
+        const tareaEliminada = tasks.splice(index, 1);
+        console.log('Tarea eliminada:', tareaEliminada[0]);
+      } else {
+        console.log('La tarea no se puede eliminar, aún no se ha completado');
+      }
+      
+      mostrarMenu();
+    } else {
+      console.log('No se encontró la tarea con el ID especificado.');
+      mostrarMenu();
+    }
+  });
+}
+
+function displayTasks() {
+  console.log('Mostrando Tareas');
+  console.log(tasks);  
   mostrarMenu();
+}
+
+function salir() {
+  console.log('Saliendo del programa...');
+  rl.close();
 }
 
 mostrarMenu();
 
+rl.on('line', (input) => {
+  const opcion = parseInt(input);
+  switch (opcion) {
+    case 1:
+      agregarTarea();
+      break;
+    case 2:
+      modificarTarea();
+      break;
+    case 3:
+      completarTarea();
+      break;
+    case 4:
+      eliminarTarea();
+      break;
+      case 5:
+        displayTasks();
+      break;
+    case 6:
+      salir();
+      break;
+    default:
+      console.log('Opción no válida. Por favor, ingrese un número del 1 al 5.');
+      mostrarMenu();
+      break;
+  }
+});
+
+rl.on('close', () => {
+  console.log('Programa finalizado.');
+});
