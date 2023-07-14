@@ -71,11 +71,7 @@ function processCommand(command) {
 }
 
 function question() {
-      
-  
   rl.question('Ingrese un comando (add/remove/complete/list/exit):', (command) => {
-   
-    
     processCommand(command);
     if (command !== 'exit') {
       question(); // Vuelve a llamar a la función para continuar preguntando
@@ -83,40 +79,3 @@ function question() {
   });
 }
 question();
-
-
-
-//////////////////////////////////////////////////////////////////
-function mostrarMenu() {
-  console.log('=== Menú ===');
-  console.log('1. Agregar tarea');
-  console.log('2. Salir');
-  
-  const opcion = readline.question('Ingrese su opción: ');
-
-  switch (opcion) {
-    case '1':
-      agregarTarea();
-      break;
-    case '2':
-      console.log('¡Hasta luego!');
-      process.exit(0); // Terminar la ejecución del programa
-    default:
-      console.log('Opción inválida.');
-      mostrarMenu();
-  }
-}
-
-function agregarTarea() {
-  const tarea = readline.question('Ingrese la tarea: ');
-  const descripcion = readline.question('Ingrese la descripción: ');
-
-  // Aquí puedes hacer lo que necesites con la tarea y la descripción ingresadas,
-  // como almacenarlas en un arreglo o enviarlas a una API, por ejemplo.
-  
-  console.log('Tarea agregada exitosamente.');
-  mostrarMenu();
-}
-
-mostrarMenu();
-
