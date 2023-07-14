@@ -70,8 +70,6 @@ function eliminarTarea() {
 
     if (index !== -1) {
       const tarea = tasks[index];
-5
-
       if (tarea.completada === true) {
         const tareaEliminada = tasks.splice(index, 1);
         console.log('Tarea eliminada:', tareaEliminada[0]);
