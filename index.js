@@ -37,10 +37,12 @@ function agregarTarea() {
       };
       tasks.push(tarea);
       console.log('Tarea agregada:', tarea);
+      mostrarMenu();
     })
     .catch((error) => {
       console.error('Error al agregar la tarea:', error);
     });
+    mostrarMenu();
 }
 //Esta funcion la deje de la manera (async y await) con el fin de que se note la diferencia en el codigo
 async function modificarTarea() {
@@ -52,7 +54,8 @@ async function modificarTarea() {
     }
     const nuevaDescripcion = await pregunta('Ingrese la nueva descripción de la tarea:');
     tarea.descripcion = nuevaDescripcion;
-    console.log('Tarea modificada:', tarea);
+    console.log('Tarea modificada:', tarea);    mostrarMenu();
+    mostrarMenu();
   } catch (error) {
     console.error('Error al modificar la tarea:', error);
   }
