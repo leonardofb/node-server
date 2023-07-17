@@ -1,3 +1,4 @@
+// tasks.js
 const readline = require('readline');
 
 const rl = readline.createInterface({
@@ -16,9 +17,7 @@ function mostrarMenu() {
   console.log('5. Mostrar Tareas');
   console.log('6. Salir');
   console.log('-----------------');
-//console.log(tasks);  
 }
-
 
 function agregarTarea() {
   rl.question('Ingrese la descripción de la tarea: ', (descripcion) => {
@@ -55,7 +54,7 @@ function completarTarea() {
     if (tarea) {
       tarea.completada = true;
       console.log('Tarea completada:', tarea);
-      
+
       mostrarMenu();
     } else {
       console.log('No se encontró la tarea con el ID especificado.');
@@ -76,7 +75,7 @@ function eliminarTarea() {
       } else {
         console.log('La tarea no se puede eliminar, aún no se ha completado');
       }
-      
+
       mostrarMenu();
     } else {
       console.log('No se encontró la tarea con el ID especificado.');
@@ -87,7 +86,7 @@ function eliminarTarea() {
 
 function displayTasks() {
   console.log('Mostrando Tareas');
-  console.log(tasks);  
+  console.log(tasks);
   mostrarMenu();
 }
 
@@ -95,6 +94,7 @@ function salir() {
   console.log('Saliendo del programa...');
   rl.close();
 }
+
 
 mostrarMenu();
 
@@ -113,8 +113,8 @@ rl.on('line', (input) => {
     case 4:
       eliminarTarea();
       break;
-      case 5:
-        displayTasks();
+    case 5:
+      displayTasks();
       break;
     case 6:
       salir();
@@ -124,7 +124,19 @@ rl.on('line', (input) => {
       mostrarMenu();
       break;
   }
+  
 });
+
+module.exports = {
+  tasks, // Exportar la lista de tareas
+  /*agregarTarea,  ///Si necesiata reutilizar las funciones ambien las puede exportar 
+  modificarTarea,
+  completarTarea,
+  eliminarTarea,
+  displayTasks
+  */
+};
+
 
 rl.on('close', () => {
   console.log('Programa finalizado.');
